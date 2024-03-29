@@ -16,7 +16,7 @@ Se entrambe le librerie saranno state installate correttamente sul proprio siste
 make all
 ```
 
-La compilazione manuale può essere fatta ricordando che il test delle prestazioni utilizza oltre al file DistributionHash.cpp anche il file MurmurHash3.cpp, e ricordando che la compilazione usando le librerie installate necessita di specificare i seguenti flag:
+Se si dovessero avere problemi col make, la compilazione manuale può essere fatta ricordando che il test delle prestazioni utilizza oltre al file DistributionHash.cpp anche il file MurmurHash3.cpp, e ricordando che la compilazione usando le librerie installate necessita di specificare i seguenti flag:
 
 ``` sh
 -std=c++17 -lnthash -lcityhash
@@ -49,7 +49,7 @@ Se si è interessati a lanciare entrambi i benchmark sequenzialmente:
 ```sh
 ./test_suite.sh <base_pair> <iterations> <num_sequences> <k> [num_hash_values...]
 ```
-Dove basta sostituire a "[num_hash_values...]" una sequenza di valori che si vuole avere hash function count.
+Dove basta sostituire a "[num_hash_values...]" una sequenza di valori che si vuole avere come hash function count.
 Per esempio:
 
 ```sh
