@@ -58,7 +58,7 @@ int main(int argc, char* argv[]){
     auto duration_nt = std::chrono::duration_cast<std::chrono::microseconds>(stop_nt - start_nt);
 
     //std::cout << "Tempo trascorso: " << duration_nt.count() << " microsecondi" << std::endl;
-    /* TODO: Aggiungi una media per iterazione e magari la lista dei k-mer */
+    /* TODO: Aggiungi una modalità verbose se il codice è richiamato senza script */
 
     /** TEST DI MURMURHASH3 **/
     //std::cout << "Commencing Murmurhash3 benchmarking using this random sequence for " << iterations << " iterations on " << k << "-mers" << " hashed " << num_hashes << " times" << std::endl

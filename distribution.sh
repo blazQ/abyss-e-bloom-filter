@@ -20,5 +20,7 @@ ARGS=()
 ARGS=("$BASE_PAIR $ITERATIONS $K $NUM_HASHES")
 
 for arg in "${ARGS[@]}"; do
+    echo "Generating hash values for ${ITERATIONS} ${BASE_PAIR}bp sequences, assuming k = ${K} and hasing ${NUM_HASHES} times..."
     ./"$PROGRAM" $arg >> "$OUTPUT_FILE"
+    echo "Done!"
 done

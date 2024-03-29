@@ -23,5 +23,10 @@ for ((i = 0; i < 5; i++)); do
 done
 
 for arg in "${ARGS[@]}"; do
+    read -r BASE_PAIR DOUBLED_ITERATIONS K NUM_HASHES <<< "$arg"
+
+    echo "Benchmarking with ${DOUBLED_ITERATIONS} ${BASE_PAIR}bp sequences, assuming k = ${K} and hashing ${NUM_HASHES} times..."
     ./"$PROGRAM" $arg >> "$OUTPUT_FILE"
+    echo "Done!"
 done
+echo "Output saved to ${OUTPUT_FILE}"
