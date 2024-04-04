@@ -1,45 +1,76 @@
 #Script to evaluate uniform distribuition of the data
+options(scipen = 999)
 
 #NtHash2 ---------
 
-#Test K-S
-dataNt <- read.csv("nthashvalue.csv")
-ks_resultNt <- ks.test(dataNt, "punif", min(dataNt), max(dataNt))
+#Reading and adjusting data
+dataNt <- read.csv("nthashDis.csv")
+colnames(dataNt)[1] <- "Values"
+dataNt$Values <- as.numeric(as.character(dataNt$Values))
+
+# Kolmogorov-Smirnov test on the data
+ks_resultNt <- ks.test(dataNt$Values, "punif", min(dataNt$Values), max(dataNt$Values))
 print(ks_resultNt)
 
 #Plot
-#Scientific notation conversion
-dataNt <- as.numeric(as.character(dataNt$X8683982964936228251)) 
-hist(dataNt, freq = FALSE, main = "Distribuzione dei dati NTHash", 
+
+hist(dataNt$Values, freq = FALSE, main = "Distribuzione dei dati NTHash", 
      xlab = "Valori", ylab = "Densità",col="green")
 
-min_val <- min(dataNt)
-max_val <- max(dataNt)
+min_val <- min(dataNt$Values)
+max_val <- max(dataNt$Values)
 curve(dunif(x, min_val, max_val), add = TRUE,
       col = "blue", lwd = 2, n = 1001, from = min_val, to = max_val)
 
 #---------------------------
-#MurmurHash3 ---DA FARE
-dataMur <- read.csv("murmurDis.csv")
-colnames(dataMur)[colnames(dataMur) == "X4afea45b67ee70587872c1c18cd07946"] <- "Values"
+#MURMURHASH3 TEST
 
-ks_resultM <- ks.test(dataMur, "punif", min(dataMur), max(dataMur))
+#Reading and adjusting data
+dataMur <- read.csv("murmurDis.csv")
+colnames(dataMur)[1] <- "Values"
+dataMur$Values <- as.numeric(as.character(dataMur$Values))
+
+# Kolmogorov-Smirnov test on the data
+ks_resultM <- ks.test(dataMur$Values, "punif", min(dataMur$Values), max(dataMur$Values))
 print(ks_resultM)
 
+#Plot
+hist(dataMur$Values, freq = FALSE, main = "Distribuzione dei dati di MurmurHash", 
+     xlab = "Valori", ylab = "Densità", col = "green")
 
-hist(dataMur, freq = FALSE, main = "Distribuzione dei dati NTHash", 
-     xlab = "Valori", ylab = "Densità",col="green")
+min_val <- min(dataMur$Values)
+max_val <- max(dataMur$Values)
 
-min_val <- min(dataNt)
-max_val <- max(dataNt)
 curve(dunif(x, min_val, max_val), add = TRUE,
       col = "blue", lwd = 2, n = 1001, from = min_val, to = max_val)
 
 
 
 #------------------------
-#CityHash
+#CITYHASH TEST
+
+#Reading and adjusting data
 dataCity <- read.csv("cityDis.csv")
-ks_resultCity <- ks.test(dataCity, "punif", min(dataCity), max(dataCity))
+colnames(dataCity)[1] <- "Values"
+dataCity$Values <- as.numeric(as.character(dataCity$Values))
+
+# Kolmogorov-Smirnov test on the data
+ks_resultCity <- ks.test(dataCity$Values, "punif", min(dataCity$Values), max(dataCity$Values))
 print(ks_resultCity)
+
+#Plot
+hist(dataCity$Values, freq = FALSE, main = "Distribuzione dei dati di CityHash", 
+     xlab = "Valori", ylab = "Densità", col = "green")
+
+min_val <- min(dataCity$Values)
+max_val <- max(dataCity$Values)
+
+curve(dunif(x, min_val, max_val), add = TRUE,
+      col = "blue", lwd = 2, n = 1001, from = min_val, to = max_val)
+
+
+
+
+
+
 
