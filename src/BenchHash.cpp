@@ -91,7 +91,6 @@ int main(int argc, char* argv[]){
             for (int i = 0; i <= seqLen - k; ++i) {
                 // Get pointer to string buffer
                 std::string current_kmer = randomDNASequence.substr(i, k);
-                const void* keyPtr = static_cast<const void*>(current_kmer.c_str());
                     for(int j = 0; j < num_hashes; j++){
                         CityHash128(randomDNASequence.c_str(), seqLen);
                     }

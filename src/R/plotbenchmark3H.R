@@ -1,4 +1,4 @@
-# Leggi i dati dal file CSV
+# reading data from the .csv file
 data <- read.csv("bench3h.csv")
 
 # Extracting data and converting from micro seconds to seconds

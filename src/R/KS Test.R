@@ -8,8 +8,9 @@ ks_resultNt <- ks.test(dataNt, "punif", min(dataNt), max(dataNt))
 print(ks_resultNt)
 
 #Plot
-dataNt <- as.numeric(as.character(dataNt$X8683982964936228251)) #conversione da notazione scientifica
-hist(dataNt, freq = FALSE, main = "Distribuzione dei dati", 
+#Scientific notation conversion
+dataNt <- as.numeric(as.character(dataNt$X8683982964936228251)) 
+hist(dataNt, freq = FALSE, main = "Distribuzione dei dati NTHash", 
      xlab = "Valori", ylab = "Densità",col="green")
 
 min_val <- min(dataNt)
@@ -18,8 +19,9 @@ curve(dunif(x, min_val, max_val), add = TRUE,
       col = "blue", lwd = 2, n = 1001, from = min_val, to = max_val)
 
 #---------------------------
-#MurmurHash3
+#MurmurHash3 ---DA FARE
 dataMur <- read.csv("murmur.csv")
+
 ks_resultM <- ks.test(dataMur, "punif", min(dataMur), max(dataMur))
 print(ks_resultM)
 
