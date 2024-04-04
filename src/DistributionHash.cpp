@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <fstream>
 #include <string>
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]){
     }
 
     /**MURMURHASH3 TEST*/
-    uint64_t hashValue[2];
+    uint32_t hashValue;
     // For each iteration
     for(int i = 0; i < iterations; i++) {
         std::string current_sequence = generateRandomDNASequence(seqLen);
@@ -65,8 +66,8 @@ int main(int argc, char* argv[]){
                 // Get pointer to string buffer
                 std::string current_kmer = current_sequence.substr(i, k);
                 const void* keyPtr = static_cast<const void*>(current_kmer.c_str());
-                       MurmurHash3_x64_128(keyPtr, k, 0, &hashValue);
-                       murmurDisOut<< std::hex << hashValue[0] << hashValue[1] << std::endl;
+                       MurmurHash3_x86_32(keyPtr, k, 0, &hashValue);
+                       murmurDisOut<< hashValue << std::endl;
             }
     }
 
@@ -78,8 +79,7 @@ int main(int argc, char* argv[]){
             for (int i = 0; i <= seqLen - k; ++i) {
                 // Get pointer to string buffer
                 std::string current_kmer = current_sequence.substr(i, k);
-                        std::pair<uint64_t, uint64_t> result = CityHash128(current_kmer.c_str(), seqLen);
-                        cityDisOut<< std::hex << result.first << result.second << std::endl;
+                        cityDisOut << CityHash64(current_kmer.c_str(), seqLen)<<std::endl;
             }
     }
 }
