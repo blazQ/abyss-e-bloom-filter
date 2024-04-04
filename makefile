@@ -8,7 +8,7 @@ EXE_DIST := $(BIN_DIR)/DistributionHash.out
 EXE_BENCH := $(BIN_DIR)/BenchHash.out
 EXE_BLOOM := $(BIN_DIR)/BloomTest.out
 
-SRC_DIST := $(wildcard $(SRC_DIR)/DistributionHash.cpp)
+SRC_DIST := $(wildcard $(SRC_DIR)/DistributionHash.cpp $(SRC_DIR)/MurmurHash3.cpp)
 SRC_BENCH := $(wildcard $(SRC_DIR)/BenchHash.cpp $(SRC_DIR)/MurmurHash3.cpp)
 SRC_BLOOM := $(wildcard $(SRC_DIR)/BloomTest.cpp)
 
@@ -20,7 +20,7 @@ OBJ_BLOOM := $(SRC_BLOOM:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 CPPFLAGS:= -Iinclude -MMD -MP
 CXXFLAGS:= -Wall -Wextra -Wpedantic -std=c++17
 LDFLAGS:=
-LDLIBS:= -lnthash
+LDLIBS:= -lnthash -lcityhash
 
 .PHONY: all clean
 
@@ -33,7 +33,7 @@ $(EXE_BLOOM): $(OBJ_BLOOM) | $(BIN_DIR)
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(EXE_BENCH): $(OBJ_BENCH) | $(BIN_DIR)
-	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -lcityhash -o $@
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
