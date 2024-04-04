@@ -1,19 +1,18 @@
-# Leggi i dati dal file CSV
+# Reading data from .csv file
 data <- read.csv("bench1h.csv")
 
-# Estrai colonne dei dati
+# Extracting data and converting from micro seconds to seconds
 ntHash2 <- data$ntHash2/1000000
 
-# Definisci i valori e le etichette personalizzate per l'asse delle ascisse
+#plotting data beggining with NTHash
 valori_ascisse <- c(1, 2, 4, 6, 8)
 etichette_ascisse <- c("500k", "1M", "2M", "4M", "8M")
 
-# Crea il grafico con gli assi invertiti e le etichette personalizzate sull'asse x
 plot(valori_ascisse, ntHash2, xlab = "Numero di sequenze", ylab = "Tempo di esecuzione in secondi", 
      ylim=c(0,700), pch = 16, col = "blue", xaxt = "n")
 lines(valori_ascisse, ntHash2, type = "l", col = "blue")
 
-# Aggiungi le etichette personalizzate sull'asse x
+
 axis(1, at = valori_ascisse, labels = etichette_ascisse)
 
 #-----MurmurHash

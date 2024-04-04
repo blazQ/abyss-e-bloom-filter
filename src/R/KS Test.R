@@ -1,4 +1,4 @@
-#Script per valutare la distribuzione dei dati
+#Script to evaluate uniform distribuition of the data
 
 #NtHash2 ---------
 
