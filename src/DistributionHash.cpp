@@ -38,14 +38,14 @@ int main(int argc, char* argv[]){
     std::ostream& murmurDisOut = murmurDis;
     std::ostream& cityDisOut = cityDis;
 
-    /** TEST DI NTHASH **/
     int seqLen = std::atoi(argv[1]);
     int iterations = std::atoi(argv[2]);
     int k = std::atoi(argv[3]);
     int num_hashes = std::atoi(argv[4]);
 
-
     srand(time(0));
+
+    /** TEST DI NTHASH **/
     for(int i = 0; i < iterations; i++){
         std::string current_sequence = generateRandomDNASequence(seqLen);
         nthash::NtHash nth(current_sequence, num_hashes, k);

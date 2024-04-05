@@ -16,10 +16,8 @@ NUM_HASHES_VALUES=("$@")
 
 for NUM_HASHES in "${NUM_HASHES_VALUES[@]}"; do
 
-    OUTPUT_DISTRIBUTION="output_values_${NUM_HASHES}.csv"
-
     OUTPUT_BENCHMARK="output_${NUM_HASHES}.csv"
 
     ./benchmark.sh "$BASE_PAIR" "$ITERATIONS" "$K" "$NUM_HASHES" "$OUTPUT_BENCHMARK"
-    ./distribution.sh "$BASE_PAIR" "$NUM_SEQUENCES" "$K" "$NUM_HASHES" "$OUTPUT_DISTRIBUTION"
+    ./distribution.sh "$BASE_PAIR" "$NUM_SEQUENCES" "$K" "$NUM_HASHES"
 done

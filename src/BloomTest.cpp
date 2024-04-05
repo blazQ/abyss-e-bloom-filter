@@ -1,24 +1,36 @@
 #include <iostream>
-#include <ostream>
-#include <fstream>
 #include <string>
-#include <cstdlib>
 #include <ctime>
 #include "BloomFilter.h"
 #include <nthash/nthash.hpp>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 #include<random>
 
-std::string generateRandomDNASequence(int length) {
-    const std::string bases = "ACGT";
-    std::string sequence;
 
-    for (int i = 0; i < length; ++i) {
-        int randomIndex = rand() % 4; // Generate random index in the range [0, 3]
+using namespace std;
+
+
+string generateRandomDNASequence(size_t length) {
+    const string bases = "ACGT";
+    string sequence;
+
+    for (size_t i = 0; i < length; ++i) {
+        size_t randomIndex = rand() % 4; // Generate random index in the range [0, 3]
         sequence += bases[randomIndex];
     }
 
     return sequence;
+}
+
+// Funzione per dividere una sequenza in k-mer
+vector<string> splitIntoKmers(const string& sequence, size_t k) {
+    vector<string> kmers;
+    for (size_t i = 0; i <= sequence.length() - k; ++i) {
+        kmers.push_back(sequence.substr(i, k));
+    }
+    return kmers;
 }
 
 
@@ -27,58 +39,46 @@ int main() {
                     - Fairly sparse k-mer distribution in sequences
                     - Repeatable tests
         TODO: Flesh out the script, so certain parameters can be specified with command line arguments. */
-    /*
-    Bloomfilter bloomfilter(1, 50);
-    std::vector<std::string> stringVec;
+    // Vector of pairs that contains a sequence and the list of its kmers
+    vector<pair<string, vector<string> > > dataset;
+    unordered_set<string> kmers;
+    srand(time(0));
 
-    for(int i = 0; i < 1000000; i++){
-        std::string randomString = generateRandomDNASequence(250);
-        stringVec.push_back(randomString);
+    const size_t sequenceLength = 250;
+    const size_t k = 50;
+    const size_t numSequences = 100000;
+
+    for(size_t i = 0; i < numSequences; i++){
+        string sequence = generateRandomDNASequence(sequenceLength);
+        vector<string> kmers = splitIntoKmers(sequence, k);
+        dataset.push_back(pair<string, vector<string> >(sequence, kmers));
     }
 
-    for(int i = 0; i < 500000; i++){
-        bloomfilter.insert(stringVec[i]);
-    }
-
-    for(int i = 500000; i < 1000000; i++){
-        std::cout << bloomfilter.contains(stringVec[i]) << std::endl;
-    }
-    */
-    size_t hash_func_count = 1;
-    size_t k_size = 50;
-    Bloomfilter bloom_filter(hash_func_count, k_size);
-
-    // Inserimento dei dati nel Bloom filter
-    std::vector<std::string> dataset;
-   for(int i = 0; i < 1000000; i++){
-        std::string randomString = generateRandomDNASequence(250);
-        dataset.push_back(randomString);
-    }
-    for (int i = dataset.size()/2; i < dataset.size(); i++ ) {
-        bloom_filter.insert(dataset[i]);
-    }
-
-    // Test dei dati casuali
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<size_t> dis(0, dataset.size()/2);
-    size_t num_random_tests = 10000;
-    size_t false_positives = 0;
-
-    for (size_t i = 0; i < num_random_tests; ++i) {
-        // Genera dato casuale
-        size_t random_index = dis(gen);
-        std::string random_data = dataset[random_index];
-        // Verifica se il Bloom filter identifica erroneamente il dato casuale come presente
-        if (bloom_filter.contains(random_data)) {
-            false_positives++;
+    Bloomfilter filter(1, 50);
+    for(size_t i = 0; i < dataset.size()/2; i++){
+        // insert sequence into bloom filter
+        filter.insert(dataset[i].first);
+        // mark its k-mers as done and dusted
+        for(const auto& kmer: dataset[i].second){
+            kmers.insert(kmer);
         }
     }
-    std::cout<<"Number of false positives: "<<false_positives<<std::endl;
-    // Calcolo della probabilità di falsi positivi
-    double false_positive_probability = static_cast<double>(false_positives) / num_random_tests;
-    std::cout << "Probabilita' di falsi positivi: " << false_positive_probability << std::endl;
 
+    uint64_t fp = 0;
+    for(size_t i = dataset.size()/2; i < dataset.size(); i++){
+        // It shouldn't, so if it does
+        if(filter.contains(dataset[i].first)){
+            // We check if its k-mers are inside the marked set
+            for (const auto& kmer: dataset[i].second){
+                if(kmers.find(kmer) == kmers.end()){
+                    ++fp;
+                    break;
+                }
+            }
+        }
+    }
+
+    cout << fp/(dataset.size()/2) << endl;
 
     return 0;
 }
