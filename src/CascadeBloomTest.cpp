@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include "BloomFilter.h"
+#include "CascadeBloomFilter.h"
 #include <nthash/nthash.hpp>
 #include <unordered_set>
 #include <utility>
@@ -34,19 +34,26 @@ vector<string> splitIntoKmers(const string& sequence, size_t k) {
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
     /* TODO: Construct a dataset with more constraints and rules:
                     - Fairly sparse k-mer distribution in sequences
                     - Repeatable tests
         TODO: Flesh out the script, so certain parameters can be specified with command line arguments. */
+
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " <seq_length> <k> <numSequences>" << std::endl;
+        return 1;
+    }
+
+    const size_t sequenceLength = std::atoi(argv[1]);
+    const size_t k = std::atoi(argv[2]);
+    const size_t numSequences = std::atoi(argv[3]);
+
+
     // Vector of pairs that contains a sequence and the list of its kmers
     vector<pair<string, vector<string> > > dataset;
     unordered_set<string> kmers;
     srand(time(0));
-
-    const size_t sequenceLength = 250;
-    const size_t k = 50;
-    const size_t numSequences = 100000;
 
     for(size_t i = 0; i < numSequences; i++){
         string sequence = generateRandomDNASequence(sequenceLength);
@@ -54,7 +61,7 @@ int main() {
         dataset.push_back(pair<string, vector<string> >(sequence, kmers));
     }
 
-    Bloomfilter filter(1, 50);
+    CascadeBloomfilter filter(1, 50);
     for(size_t i = 0; i < dataset.size()/2; i++){
         // insert sequence into bloom filter
         filter.insert(dataset[i].first);

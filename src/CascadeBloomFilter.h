@@ -1,15 +1,15 @@
-#ifndef BLOOMFILTER_H
-#define BLOOMFILTER_H
+#ifndef CASCADEBLOOMFILTER_H
+#define CASCADEBLOOMFILTER_H
 
 #include <nthash/nthash.hpp>
 #include <bitset>
 #include <memory>
 #include <stdexcept>
 
-class Bloomfilter
+class CascadeBloomfilter
 {
 public:
-	Bloomfilter(size_t hash_func_count = 4, size_t k_size = 3)
+	CascadeBloomfilter(size_t hash_func_count = 4, size_t k_size = 3)
 	: hash_function_count(hash_func_count),
 	  bloomfilter_stores(hash_func_count, std::bitset<bloomfilter_store_size>()),
 	  object_count_(0),
