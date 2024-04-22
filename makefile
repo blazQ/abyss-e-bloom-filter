@@ -11,7 +11,7 @@ EXE_CBLOOM := $(BIN_DIR)/CBloomTest.out
 
 SRC_DIST := $(wildcard $(SRC_DIR)/DistributionHash.cpp $(SRC_DIR)/MurmurHash3.cpp)
 SRC_BENCH := $(wildcard $(SRC_DIR)/BenchHash.cpp $(SRC_DIR)/MurmurHash3.cpp)
-SRC_BLOOM := $(wildcard $(SRC_DIR)/BloomTest.cpp)
+SRC_BLOOM := $(wildcard $(SRC_DIR)/BloomTest.cpp $(SRC_DIR)/MurmurHash3.cpp)
 SRC_CBLOOM := $(wildcard $(SRC_DIR)/CascadeBloomTest.cpp)
 
 

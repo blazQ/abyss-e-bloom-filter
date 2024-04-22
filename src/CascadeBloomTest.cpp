@@ -35,10 +35,6 @@ vector<string> splitIntoKmers(const string& sequence, size_t k) {
 
 
 int main(int argc, char* argv[]) {
-    /* TODO: Construct a dataset with more constraints and rules:
-                    - Fairly sparse k-mer distribution in sequences
-                    - Repeatable tests
-        TODO: Flesh out the script, so certain parameters can be specified with command line arguments. */
 
     if (argc != 4) {
         std::cerr << "Usage: " << argv[0] << " <seq_length> <k> <numSequences>" << std::endl;

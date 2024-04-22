@@ -41,8 +41,6 @@ public:
         k(k)
     {}
 
-    NtHashFunction() : num_hashes(1), k(3) {}
-
     size_t operator()(const T& data, size_t length) const override {
         nthash::NtHash nth(data, num_hashes, k);
         while(nth.roll()){}
@@ -80,7 +78,8 @@ class Bloomfilter
 public:
     Bloomfilter() :
         bloomfilter_stores(),
-        object_count_(0)
+        object_count_(0),
+        hashFunc()
     {
         using ConstructorType = typename HashFunctionTraits<HashFunc>::ConstructorType;
         hashFunc = ConstructorType();
@@ -88,7 +87,8 @@ public:
 
     Bloomfilter(size_t hashes, size_t k) :
         bloomfilter_stores(),
-        object_count_(0)
+        object_count_(0),
+        hashFunc(hashes, k)
     {
         using ConstructorType = typename HashFunctionTraits<HashFunc>::ConstructorType;
         hashFunc = ConstructorType(hashes, k);
