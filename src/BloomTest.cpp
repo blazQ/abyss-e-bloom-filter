@@ -36,9 +36,10 @@ int main(int argc, char* argv[]) {
     const size_t k = atoi(argv[2]);
 
     if ( k < 3){
-        cerr << "K must not be trvial!" << endl;
+        cerr << "K must not be trivial!" << endl;
         return 0;
     }
+
 
     const size_t numSequences = atoi(argv[3]);
     const size_t numHashes = atoi(argv[4]);

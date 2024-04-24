@@ -4,3 +4,5 @@
 *.d
 .DS_Store
 *output*
+*.json
+.*

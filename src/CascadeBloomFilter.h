@@ -20,7 +20,7 @@ public:
 			throw std::invalid_argument("Bloomfilter could not be initialized: hash_func_count must be larger than 0");
 		}
         if(3 > k)
-            throw std::invalid_argument("Bloomfilter could not be initilized: k value must be larger than 2");
+            throw std::invalid_argument("Bloomfilter could not be initalized: k value must be larger than 2");
 	}
 
 
