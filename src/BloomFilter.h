@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <string>
 #include <cstdint>
 #include <bitset>
@@ -72,12 +73,15 @@ struct HashFunctionTraits<CityHash<std::string>> {
     using ConstructorType = CityHash<std::string>;
 };
 
+// Defining a generic HashFunction type and a generic Size value for bitset instantiation.
+// You can do it differently if you prefer, for example by using a boolean vector and resizing with a constructor argument.
+// A bitset should have less memory overhead (in theory)
 template <typename HashFunc>
 class Bloomfilter
 {
 public:
-    Bloomfilter() :
-        bloomfilter_stores(),
+    Bloomfilter(size_t filter_size = default_size) :
+        bloomfilter_store(filter_size),
         object_count_(0),
         hashFunc()
     {
@@ -85,8 +89,8 @@ public:
         hashFunc = ConstructorType();
     }
 
-    Bloomfilter(size_t hashes, size_t k) :
-        bloomfilter_stores(),
+    Bloomfilter(size_t filter_size, size_t hashes, size_t k) :
+        bloomfilter_store(filter_size),
         object_count_(0),
         hashFunc(hashes, k)
     {
@@ -96,21 +100,21 @@ public:
 
     void insert(const std::string& object)
     {
-        size_t hash = hashFunc(object, object.size()) % bloomfilter_store_size;
-        bloomfilter_stores[hash] = true;
+        size_t hash = hashFunc(object, object.size()) % bloomfilter_store.size();
+        bloomfilter_store[hash] = true;
         ++object_count_;
     }
 
     void clear()
     {
-        bloomfilter_stores.reset();
+        bloomfilter_store.clear();
         object_count_ = 0; // Reset the object count
     }
 
     bool contains(const std::string& object) const
     {
-        size_t hash = hashFunc(object, object.size()) % bloomfilter_store_size;
-        return bloomfilter_stores[hash];
+        size_t hash = hashFunc(object, object.size()) % bloomfilter_store.size();
+        return bloomfilter_store[hash];
     }
 
     size_t object_count() const
@@ -123,10 +127,16 @@ public:
         return 0 == object_count();
     }
 
-private:
-    static constexpr size_t bloomfilter_store_size = 33554432;
+    size_t size() const
+    {
+        return bloomfilter_store.size();
+    }
 
-    std::bitset<bloomfilter_store_size> bloomfilter_stores;
+private:
+
+    static constexpr size_t default_size = 33554432;
+
+    std::vector<bool> bloomfilter_store;
 
     size_t object_count_;
 

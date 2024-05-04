@@ -1,11 +1,11 @@
+# ABYSS e Bloom Filters
+
 - [ABYSS e Bloom Filters](#abyss-e-bloom-filters)
   - [Installazione](#installazione)
     - [Prerequisiti](#prerequisiti)
   - [Utilizzo](#utilizzo)
     - [Funzioni Hash](#funzioni-hash)
     - [Bloom Filter](#bloom-filter)
-
-# ABYSS e Bloom Filters
 
 Repository per il progetto di Strumenti Formali per la Bioinformatica di Pietro Negri e Francesco Maddaloni.
 
@@ -30,6 +30,7 @@ make all
 
 >[!TIP]
 La compilazione manuale può essere fatta ricordando che al sorgente di ogni eseguibile va affiancato il sorgente di Murmurhash3 e ricordando che la compilazione usando le librerie installate necessita di specificare i seguenti flag:
+
 ``` sh
 -std=c++17 -lnthash -lcityhash
 ```
@@ -38,6 +39,7 @@ Dopo la compilazione gli eseguibili potranno essere lanciati singolarmente, oppu
 
 >[!TIP]
 >In particolare, ogni shell script necessita dei permessi di esecuzione:
+
 ```sh
 chmod +x nomescript.sh
 ```
@@ -75,4 +77,5 @@ Per esempio:
 Testerà le prestazioni e la distribuzione dei valori quando ogni k-mer viene hashato 1, 3, 5, e 7 volte. Si possono inserire quanti valori quanti si vogliano.
 
 ### Bloom Filter
+
 *Questa sezione verrà aggiornata quando avremo terminato il lavoro sull'interfaccia del filtro.*

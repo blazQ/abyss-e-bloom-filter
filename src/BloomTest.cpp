@@ -27,8 +27,8 @@ string generateRandomDNASequence(size_t length) {
 
 int main(int argc, char* argv[]) {
 
-    if (argc != 5) {
-        cerr << "Usage: " << argv[0] << " <seq_length> <k> <numSequences> <num_hashes>" << endl;
+    if (argc != 6) {
+        cerr << "Usage: " << argv[0] << " <seq_length> <k> <numSequences> <num_hashes> <filter_size>" << endl;
         return 1;
     }
 
@@ -40,18 +40,18 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-
     const size_t numSequences = atoi(argv[3]);
     const size_t numHashes = atoi(argv[4]);
+    const size_t filter_size = atoi(argv[5]);
 
-
-    Bloomfilter<CityHash<string> >* cityFilter = new Bloomfilter<CityHash<string> >;
-    Bloomfilter<MurmurHash3<string> >* murmurFilter = new Bloomfilter<MurmurHash3<string> >;
-    Bloomfilter<NtHashFunction<string> >* ntFilter = new Bloomfilter<NtHashFunction<string> >(numHashes, k);
+    // You can specify the size programmatically by adding it in the constructor
+    Bloomfilter<CityHash<string>>* cityFilter = new Bloomfilter<CityHash<string>>(filter_size);
+    Bloomfilter<MurmurHash3<string>>* murmurFilter = new Bloomfilter<MurmurHash3<string>>(filter_size);
+    Bloomfilter<NtHashFunction<string>>* ntFilter = new Bloomfilter<NtHashFunction<string>>(filter_size, numHashes, k);
 
     unordered_set<string> sequences;
-    size_t fpCity = 0;
-    size_t totalCity = numSequences;
+    double fpCity = 0;
+    double totalCity = numSequences;
 
     for(size_t i=0; i<numSequences; i++){
         string sequence = generateRandomDNASequence(sequenceLength);
@@ -71,8 +71,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    size_t fpMurmur=0;
-    size_t totalMurmur = numSequences;
+    double fpMurmur=0;
+    double totalMurmur = numSequences;
     for(size_t i=0; i<numSequences; i++){
         string sequence = generateRandomDNASequence(sequenceLength);
 
@@ -91,8 +91,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    size_t fpNt = 0;
-    size_t totalNt = numSequences;
+    double fpNt = 0;
+    double totalNt = numSequences;
 
     for(size_t i=0; i<numSequences; i++){
         string sequence = generateRandomDNASequence(sequenceLength);

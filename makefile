@@ -18,7 +18,7 @@ SRC_CBLOOM := $(wildcard $(SRC_DIR)/CascadeBloomTest.cpp)
 OBJ_DIST := $(SRC_DIST:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 OBJ_BENCH := $(SRC_BENCH:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 OBJ_BLOOM := $(SRC_BLOOM:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-OBJ_CBLOOM := $(SRC_BLOOM:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+OBJ_CBLOOM := $(SRC_CBLOOM:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 CPPFLAGS:= -Iinclude -MMD -MP
 CXXFLAGS:= -Wall -Wextra -Wpedantic -std=c++17

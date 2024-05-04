@@ -1,17 +1,20 @@
 #ifndef CASCADEBLOOMFILTER_H
 #define CASCADEBLOOMFILTER_H
 
+#include <iostream>
 #include <nthash/nthash.hpp>
 #include <bitset>
 #include <memory>
 #include <stdexcept>
 
+using namespace std;
+
 class CascadeBloomfilter
 {
 public:
-	CascadeBloomfilter(size_t hash_func_count = 4, size_t k_size = 3)
+	CascadeBloomfilter(size_t filter_size, size_t hash_func_count = 4, size_t k_size = 3)
 	: hash_function_count(hash_func_count),
-	  bloomfilter_stores(hash_func_count, std::bitset<bloomfilter_store_size>()),
+	  bloomfilter_stores(hash_func_count, vector<bool>(filter_size)),
 	  object_count_(0),
       k(k_size)
 	{
@@ -30,7 +33,7 @@ public:
 		/** WATCH OUT: Since nthash functions by hashing k-mer by k-mer, here i'm not inserting the sequence in the bloom filter. I'm inserting the k-mers of the sequence!*/
         while (nth.roll()) {
             for(size_t i = 0; i < hash_function_count; i++){
-                const size_t index_to_set = nth.hashes()[i] % bloomfilter_store_size;
+                const size_t index_to_set = nth.hashes()[i] % bloomfilter_stores[i].size();
                 bloomfilter_stores[i][index_to_set] = true;
             }
         }
@@ -40,7 +43,7 @@ public:
 	void clear()
 	{
         for (auto& bitset : bloomfilter_stores) {
-            bitset.reset(); // Reset each bitset in the vector
+            bitset.clear(); // Reset each bitset in the vector
         }
         object_count_ = 0; // Reset the object count
 	}
@@ -50,7 +53,7 @@ public:
         nthash::NtHash nth(object, hash_function_count, k);
         while (nth.roll()) {
             for(size_t i = 0; i < hash_function_count; i++){
-                const size_t index_to_get = nth.hashes()[i] % bloomfilter_store_size;
+                const size_t index_to_get = nth.hashes()[i] % bloomfilter_stores[i].size();
                 if(!bloomfilter_stores[i][index_to_get]) return false;
             }
         }
@@ -67,14 +70,21 @@ public:
 		return 0 == object_count();
 	}
 
+	size_t size() const
+	{
+		return bloomfilter_stores[0].size();
+	}
+
+	size_t cascade_size() const
+	{
+		return bloomfilter_stores.size();
+	}
+
 private:
-	// Size of the bloom filter state in bits (2^25).
-	static constexpr size_t bloomfilter_store_size = 33554432;
 
 	const size_t hash_function_count;
-
-    // Statically declared array of bitsets, one for each hash function.
-    std::vector<std::bitset<bloomfilter_store_size>> bloomfilter_stores;
+	// Dynamically allocated vector of vector of bools.
+    std::vector<std::vector<bool>> bloomfilter_stores;
 
 	size_t object_count_;
     size_t k;
