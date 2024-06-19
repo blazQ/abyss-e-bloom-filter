@@ -27,7 +27,6 @@ make all
 
 >[!WARNING]
 >Se ci sono problemi durante la compilazione, modificare con il proprio compilatore il parametro CXX del makefile.
-
 >[!TIP]
 La compilazione manuale può essere fatta ricordando che al sorgente di ogni eseguibile va affiancato il sorgente di Murmurhash3 e ricordando che la compilazione usando le librerie installate necessita di specificare i seguenti flag:
 
@@ -78,4 +77,21 @@ Testerà le prestazioni e la distribuzione dei valori quando ogni k-mer viene ha
 
 ### Bloom Filter
 
-*Questa sezione verrà aggiornata quando avremo terminato il lavoro sull'interfaccia del filtro.*
+Abbiamo implementato anche un semplice bloom filter, che può essere modificato e osservato in BloomFilter.h.
+Ulteriori dettagli sono reperibili [qui](./src/BloomFilter.h).
+Per riassumere brevemente, il filtro può essere istanziato con tutte e 3 le funzioni prerequisito, basta utilizzare una sintassi di questo tipo:
+
+```c++
+    Bloomfilter<CityHash<string>>* cityFilter = new Bloomfilter<CityHash<string>>(filter_size);
+    Bloomfilter<MurmurHash3<string>>* murmurFilter = new Bloomfilter<MurmurHash3<string>>(filter_size);
+    Bloomfilter<NtHashFunction<string>>* ntFilter = new Bloomfilter<NtHashFunction<string>>(filter_size, numHashes, k);
+```
+
+Il filtro consente di effettuare la insert e la query per un elemento presente al suo interno, in modo molto semplice, come si può vedere qui (estratto dal [test](./src/BloomTest.cpp)):
+
+```c++
+    cityFilter->insert(sequence);
+    cityFilter->contains(sequence)
+```
+
+Ulteriori miglioramenti possono prevedere l'uso di più funzioni hash, o di più funzioni hash simultaneamente, o l'implementazione di alcune delle varianti del filtro viste [qui](./docs/paper/A_Review_on_Role_of_Bloom_Filter_on_DNA_Assembly.pdf).
